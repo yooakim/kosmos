@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  kosmos.api:
+    image: ${DOCKER_REGISTRY-}kosmosapi
+    build:
+      context: .
+      dockerfile: Kosmos.API/Dockerfile
