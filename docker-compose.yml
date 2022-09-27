@@ -1,8 +1,28 @@
 version: '3.4'
 
 services:
+  kosmos.db:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
+    environment:
+      - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=10
+      - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
+      - AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE=192.168.166.143
+    ports:
+      - 8081:8081
+      - 10251-10254:10251-10254
+    volumes:
+      - kosmos_data:/data/db
+
   kosmos.api:
     image: ${DOCKER_REGISTRY-}kosmosapi
+    depends_on:
+        - kosmos.db
+    ports:
+        - 5061:5061
     build:
       context: .
       dockerfile: Kosmos.API/Dockerfile
+
+volumes:
+  kosmos_data:
+
